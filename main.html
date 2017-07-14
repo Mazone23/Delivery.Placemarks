@@ -35,15 +35,12 @@
         YMaps.jQuery(function() {
             // Создает экземпляр карты и привязывает его к созданному контейнеру
             map = new YMaps.Map(YMaps.jQuery("#YMapsID")[0]);
-
             // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
             map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
             map.enableScrollZoom();
         })
-
         $scope.todoList = [];
         $scope.todoAdd = function() {
-
             var adress = document.getElementById("adress").value;
             var geocoder = new YMaps.Geocoder(adress);
 
@@ -51,6 +48,13 @@
                 var point = new YMaps.Placemark(obj.getGeoPoint());
                 point.name = obj.text;
                 return point
+            }
+
+            function addToList(text) {
+                $scope.todoList.push({
+                    todoText: text,
+                    done: false
+                });
             }
 
             YMaps.Events.observe(geocoder, geocoder.Events.Load, function() {
@@ -63,6 +67,7 @@
                     if (isNew) {
                         points.add(point);
                         map.addOverlay(points);
+                        addToList(point.name);
                     } else {
                         alert("Данный адрес уже есть в списке");
                     }
@@ -70,18 +75,11 @@
                     alert("Ничего не найдено")
                 }
             });
-
             YMaps.Events.observe(geocoder, geocoder.Events.Fault, function(error) {
                 alert("Произошла ошибка: " + error.message)
             });
-
-            $scope.todoList.push({
-                todoText: $scope.todoInput,
-                done: false
-            });
             $scope.todoInput = "";
         };
-
         $scope.remove = function() {
             var oldList = $scope.todoList;
             $scope.todoList = [];
