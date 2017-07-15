@@ -53,16 +53,15 @@
                 return point
             }
 
-			function addToList(point)
-			{
-				$scope.$apply(function() {
-					$scope.todoList.push({
-						geopoint: point,
-						done: false
-					});
-				});
-			}
-			
+            function addToList(point) {
+                $scope.$apply(function() {
+                    $scope.todoList.push({
+                        geopoint: point,
+                        done: false
+                    });
+                });
+            }
+
             YMaps.Events.observe(geocoder, geocoder.Events.Load, function() {
                 if (this.length()) {
                     var point = createPoint(this.get(0));
@@ -72,7 +71,7 @@
                     });
                     if (isNew) {
                         points.add(point);
-						addToList(point);
+                        addToList(point);
                         map.addOverlay(points);
                     } else {
                         alert("Данный адрес уже есть в списке");
@@ -91,11 +90,11 @@
 
         $scope.remove = function() {
             var oldList = $scope.todoList;
-			
+
             angular.forEach(oldList, function(x) {
                 if (x.done) {
-					$scope.todoList.splice($scope.todoList.indexOf(x), 1);
-					points.remove(x.geopoint); 
+                    $scope.todoList.splice($scope.todoList.indexOf(x), 1);
+                    points.remove(x.geopoint);
                 }
             });
         };
